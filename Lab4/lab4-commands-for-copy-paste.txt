@@ -99,3 +99,13 @@ kubectl exec -n nginx-ingress `kubectl get pods -A | grep nginx-ingress | awk '{
 kubectl create -f echo-api-vs.yaml
 
 curl -s --resolve echo.example.com:80:10.1.10.200 http://echo.example.com/api | jq
+
+kubectl delete -f echo-api-vs.yaml
+
+kubectl apply -f f5-cis-deployment.yaml
+
+kubectl describe deployment -n kube-system k8s-bigip-ctlr-deployment
+
+kubectl create -f echo-api-vs.yaml
+
+curl -s --resolve echo.example.com:80:10.1.10.200 http://echo.example.com/api | jq

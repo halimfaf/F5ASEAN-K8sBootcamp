@@ -10,7 +10,49 @@ chmod +x kubectl-calico
 
 sudo mv kubectl-calico /usr/local/bin
 
+kubectl calico get bgpconfig
+
+kubectl calico get bgppeer
+
+kubectl calico create -f calico-bgpconfig.yaml
+
 kubectl calico create -f calico-bgppeer.yaml
+
+kubectl calico get bgpconfig
+
+kubectl calico get bgppeer
+
+ssh root@10.1.1.4
+
+tmsh modify /net route-domain 0 routing-protocol add { BGP }
+
+tmsh save /sys config
+
+imish
+show ip route
+show ip bgp neighbors | grep neighbor
+exit
+
+imish
+enable
+config terminal
+router bgp 64567
+neighbor 10.1.20.5 remote-as 64567
+neighbor 10.1.20.5 activate
+neighbor 10.1.20.6 remote-as 64567
+neighbor 10.1.20.6 activate
+neighbor 10.1.20.7 remote-as 64567
+neighbor 10.1.20.7 activate
+end
+write
+exit
+
+imish
+show ip route
+show ip bgp neighbors | grep neighbor
+exit
+
+exit
 
 kubectl create -f customresourcedefinitions.yml
 

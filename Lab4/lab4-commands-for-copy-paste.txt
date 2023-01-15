@@ -1,8 +1,8 @@
 === F5 ASEAN K8s Bootcamp 2023 - Lab4 Commands ===
 
-git clone https://github.com/jokoyuliantoro/sg-k8s-bootcamp-2022-lab4
+git clone https://github.com/halimfaf/F5ASEAN-K8sBootcamp.git
 
-cp sg-k8s-bootcamp-2022-lab4/* .
+cd F5ASEAN-K8sBootcamp/Lab4/
 
 kubectl create -f customresourcedefinitions.yml
 

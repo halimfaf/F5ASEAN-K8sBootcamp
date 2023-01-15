@@ -4,6 +4,14 @@ git clone https://github.com/halimfaf/F5ASEAN-K8sBootcamp.git
 
 cd F5ASEAN-K8sBootcamp/Lab4/
 
+curl -L https://github.com/projectcalico/calico/releases/download/v3.23.3/calicoctl-linux-amd64 -o kubectl-calico
+
+chmod +x kubectl-calico
+
+sudo mv kubectl-calico /usr/local/bin
+
+kubectl calico create -f calico-bgppeer.yaml
+
 kubectl create -f customresourcedefinitions.yml
 
 kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin

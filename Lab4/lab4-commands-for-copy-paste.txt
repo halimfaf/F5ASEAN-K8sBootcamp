@@ -4,6 +4,66 @@ git clone https://github.com/halimfaf/F5ASEAN-K8sBootcamp.git
 
 cd F5ASEAN-K8sBootcamp/Lab4/
 
+kubectl create -f customresourcedefinitions.yml
+
+kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+
+kubectl create -f bigip-ctlr-clusterrole.yaml
+
+nano f5-cis-deployment.yaml
+
+kubectl create -f f5-cis-deployment.yaml
+
+kubectl get pods -A -o wide
+
+kubectl logs -n kube-system `kubectl get pods -A | grep k8s-bigip-ctlr | awk '{print $2}'`
+
+kubectl create -f f5-ipam-rbac.yaml
+
+kubectl create -f f5-ipam-persistentvolume.yaml
+
+kubectl get persistentvolume -A
+
+kubectl get persistentvolumeclaim -A
+
+nano f5-ipam-deployment.yaml
+
+kubectl create -f f5-ipam-deployment.yaml
+
+kubectl get pods -A -o wide
+
+kubectl logs -n kube-system `kubectl get pods -A | grep f5-ipam | awk '{print $2}'`
+
+kubectl create -f echo-api-deployment.yaml
+
+kubectl get pods -A -o wide
+
+kubectl exec -n nginx-ingress `kubectl get pods -A | grep nginx-ingress | awk '{print $2}'` -- ls -l /etc/nginx/
+
+kubectl exec -n nginx-ingress `kubectl get pods -A | grep nginx-ingress | awk '{print $2}'` -- ls -l /etc/nginx/conf.d
+
+kubectl create -f echo-api-ingress.yaml
+
+kubectl exec -n nginx-ingress `kubectl get pods -A | grep nginx-ingress | awk '{print $2}'` -- ls -l /etc/nginx/conf.d
+
+kubectl create -f echo-api-vs.yaml
+
+curl -s --resolve echo.example.com:80:10.1.10.200 http://echo.example.com/api | jq
+
+kubectl scale --replicas=5 -n nginx-ingress deployment/nginx-ingress
+
+kubectl get pods -A -o wide
+
+=== BONUS LAB ===
+
+kubectl delete -f echo-api-vs.yaml
+
+kubectl scale --replicas=1 -n nginx-ingress deployment/nginx-ingress
+
+kubectl delete -f f5-cis-deployment.yaml
+
+kubectl get pods -A -o wide
+
 curl -L https://github.com/projectcalico/calico/releases/download/v3.23.3/calicoctl-linux-amd64 -o kubectl-calico
 
 chmod +x kubectl-calico
@@ -54,58 +114,14 @@ exit
 
 exit
 
-kubectl create -f customresourcedefinitions.yml
-
-kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
-
-kubectl create -f bigip-ctlr-clusterrole.yaml
-
-nano f5-cis-deployment.yaml
-
 kubectl create -f f5-cis-deployment.yaml
-
-kubectl get pods -A -o wide
-
-kubectl logs -n kube-system `kubectl get pods -A | grep k8s-bigip-ctlr | awk '{print $2}'`
-
-kubectl create -f f5-ipam-rbac.yaml
-
-kubectl create -f f5-ipam-persistentvolume.yaml
-
-kubectl get persistentvolume -A
-
-kubectl get persistentvolumeclaim -A
-
-nano f5-ipam-deployment.yaml
-
-kubectl create -f f5-ipam-deployment.yaml
-
-kubectl get pods -A -o wide
-
-kubectl logs -n kube-system `kubectl get pods -A | grep f5-ipam | awk '{print $2}'`
-
-kubectl create -f echo-api-deployment.yaml
-
-kubectl get pods -A -o wide
-
-kubectl exec -n nginx-ingress `kubectl get pods -A | grep nginx-ingress | awk '{print $2}'` -- ls -l /etc/nginx/
-
-kubectl exec -n nginx-ingress `kubectl get pods -A | grep nginx-ingress | awk '{print $2}'` -- ls -l /etc/nginx/conf.d
-
-kubectl create -f echo-api-ingress.yaml
-
-kubectl exec -n nginx-ingress `kubectl get pods -A | grep nginx-ingress | awk '{print $2}'` -- ls -l /etc/nginx/conf.d
-
-kubectl create -f echo-api-vs.yaml
-
-curl -s --resolve echo.example.com:80:10.1.10.200 http://echo.example.com/api | jq
-
-kubectl delete -f echo-api-vs.yaml
-
-kubectl apply -f f5-cis-deployment.yaml
 
 kubectl describe deployment -n kube-system k8s-bigip-ctlr-deployment
 
 kubectl create -f echo-api-vs.yaml
 
 curl -s --resolve echo.example.com:80:10.1.10.200 http://echo.example.com/api | jq
+
+kubectl scale --replicas=5 -n nginx-ingress deployment/nginx-ingress
+
+kubectl get pods -A -o wide

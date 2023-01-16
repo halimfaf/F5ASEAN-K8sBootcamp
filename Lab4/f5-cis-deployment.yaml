@@ -44,7 +44,7 @@ spec:
               "--bigip-url=10.1.1.4",
               "--bigip-partition=k8s",
               "--namespace=nginx-ingress",
-              "--pool-member-type=cluster",
+              "--pool-member-type=nodeport",
               "--log-level=DEBUG",
               "--insecure=true",
               "--custom-resource-mode=true",

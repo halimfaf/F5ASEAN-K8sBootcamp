@@ -1,0 +1,21 @@
+apiVersion: "cis.f5.com/v1"
+kind: VirtualServer
+metadata:
+  name: vs-nginxdemos-hello
+  namespace: default
+  labels:
+    f5cr: "true"
+spec:
+  ipamLabel: Test
+  virtualServerHTTPPort: 80
+  snat: auto
+  pools:
+  - monitor:
+      interval: 20
+      recv: ""
+      send: "/"
+      timeout: 10
+      type: http
+    nodeMemberLabel: "cis.f5.com/nodeMemberLabel=group1"
+    service: nginx-hello-svc
+    servicePort: 9005

@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-hello
+  name: <changehere>-api
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: nginx-hello
+      app: echo-api
   template:
     metadata:
       labels:
-        app: nginx-hello
+        app: echo-api
     spec:
       containers:
-      - name: nginx-hello
-        image: nginxdemos/hello
+      - name: echo-api
+        image: ealen/echo-server
         ports:
         - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-hello-svc
+  name: echo-api-svc
 spec:
   ports:
-  - port: 9005
+  - port: 9000
     targetPort: 80
     protocol: TCP
     name: http
   selector:
-    app: nginx-hello
+    app: echo-api

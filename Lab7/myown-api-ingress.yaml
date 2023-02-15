@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo-ingress
+  annotations:
+    nginx.org/rewrites: "serviceName=echo-api-svc rewrite=/"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: f5my-aakc.xc.kode.monster
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: echo-api-svc
+            port: 
+              number: 9000
